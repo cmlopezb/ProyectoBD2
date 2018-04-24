@@ -11,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import twitter4j.Query;
+import twitter4j.QueryResult;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -45,7 +47,12 @@ public class TimeLine extends javax.swing.JFrame {
     }
     public void actualizar() throws TwitterException{
         //jTextArea1.setCaretPosition(0);
-         java.util.List<Status> statusList = twitter.getHomeTimeline();
+        
+         Query query = new Query(TxtActualizarTweet.getText());
+         QueryResult result;
+         result = twitter.search(query);
+         
+         java.util.List<Status> statusList = result.getTweets();// twitter.getHomeTimeline();
             for (int i=0; i<statusList.size(); i++) {
             jTextArea1.append(String.valueOf(statusList.get(i).getUser().getName())+"\n");
             jTextArea1.append(String.valueOf(statusList.get(i).getText())+"\n\n");
