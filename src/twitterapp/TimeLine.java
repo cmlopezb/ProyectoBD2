@@ -11,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import twitter4j.Query;
+import twitter4j.QueryResult;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -31,7 +33,7 @@ public class TimeLine extends javax.swing.JFrame {
         this.twitter=twitter;
         setTitle("TwitterApp");
         setVisible(true);
-        actualizar();
+        //actualizar();
         //avatar de usuario--------------------
             User user = twitter.showUser(twitter.getId());
             URL url = new URL (user.getProfileImageURL());
@@ -45,12 +47,19 @@ public class TimeLine extends javax.swing.JFrame {
     }
     public void actualizar() throws TwitterException{
         //jTextArea1.setCaretPosition(0);
-         java.util.List<Status> statusList = twitter.getHomeTimeline();
+        
+         Query query = new Query(TxtActualizarTweet.getText());
+         QueryResult result;
+         result = twitter.search(query);
+         
+         java.util.List<Status> statusList = result.getTweets();// twitter.getHomeTimeline();
             for (int i=0; i<statusList.size(); i++) {
-            jTextArea1.append(String.valueOf(statusList.get(i).getUser().getName())+"\n");
-            jTextArea1.append(String.valueOf(statusList.get(i).getText())+"\n\n");
-            jTextArea1.append("-------------------------------------------------\n");
-            }
+            jTextArea1.append("-----------------------"+ i +"--------------------------\n");
+            jTextArea1.append("Status :: "+String.valueOf(statusList.get(i))+"\n");
+            jTextArea1.append("Localidad :: "+String.valueOf(statusList.get(i).getUser().getLocation())+"\n");
+            jTextArea1.append("Usuario :: "+String.valueOf(statusList.get(i).getUser().getName())+"\n");
+            jTextArea1.append("Tweet :: "+String.valueOf(statusList.get(i).getText())+"\n\n");
+         }
     }
     
     /**
@@ -63,7 +72,6 @@ public class TimeLine extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         TxtActualizarTweet = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -76,18 +84,11 @@ public class TimeLine extends javax.swing.JFrame {
         jLabel1.setMinimumSize(new java.awt.Dimension(48, 48));
         jLabel1.setPreferredSize(new java.awt.Dimension(48, 48));
 
-        jButton1.setText("Twittear");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane2.setViewportView(jTextArea1);
 
-        BtnActualizar.setText("Actualizar");
+        BtnActualizar.setText("Buscar");
         BtnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnActualizarActionPerformed(evt);
@@ -98,37 +99,34 @@ public class TimeLine extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(TxtActualizarTweet)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(BtnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(27, 27, 27))
+                        .addComponent(TxtActualizarTweet, javax.swing.GroupLayout.PREFERRED_SIZE, 672, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(BtnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 35, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-                        .addGap(18, 18, 18))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(BtnActualizar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(TxtActualizarTweet, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37))
+                    .addComponent(TxtActualizarTweet, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -141,24 +139,6 @@ public class TimeLine extends javax.swing.JFrame {
             Logger.getLogger(TimeLine.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_BtnActualizarActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            if (TxtActualizarTweet.getText().isEmpty())
-            JOptionPane.showMessageDialog (null, "Escribe algo!");
-            else {
-         //       Twitter twitter = TwitterFactory.getSingleton();
-                Status tweet = twitter.updateStatus(TxtActualizarTweet.getText());
-                twitter.updateStatus(TxtActualizarTweet.getText());
-                //jTextArea1.setText(null);
-                actualizar();
-                }
-            }catch (TwitterException e) {
-            JOptionPane.showMessageDialog (null, "Ocurrio un error! no se ha podido cargar el tweet");
-            }
-            TxtActualizarTweet.setText("");
-            jTextArea1.updateUI();
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -198,7 +178,6 @@ public class TimeLine extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnActualizar;
     private javax.swing.JTextField TxtActualizarTweet;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
