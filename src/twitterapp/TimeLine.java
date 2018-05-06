@@ -11,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import twitter4j.GeoLocation;
+import twitter4j.Paging;
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Status;
@@ -36,6 +38,7 @@ public class TimeLine extends javax.swing.JFrame {
         //actualizar();
         //avatar de usuario--------------------
             User user = twitter.showUser(twitter.getId());
+            jLabel2.setText(String.valueOf(user.getName()));
             URL url = new URL (user.getProfileImageURL());
             ImageIcon img = new ImageIcon(url);
             jLabel1.setIcon(img);
@@ -49,9 +52,10 @@ public class TimeLine extends javax.swing.JFrame {
         //jTextArea1.setCaretPosition(0);
         
          Query query = new Query(TxtActualizarTweet.getText());
+         query.setCount(50);//busca 50 twitts
          QueryResult result;
          result = twitter.search(query);
-         
+
          java.util.List<Status> statusList = result.getTweets();// twitter.getHomeTimeline();
             for (int i=0; i<statusList.size(); i++) {
             jTextArea1.append("-----------------------"+ i +"--------------------------\n");
@@ -61,7 +65,27 @@ public class TimeLine extends javax.swing.JFrame {
             jTextArea1.append("Tweet :: "+String.valueOf(statusList.get(i).getText())+"\n\n");
          }
     }
-    
+     public void FiltroCaracas() throws TwitterException{
+        //jTextArea1.setCaretPosition(0);
+        
+         Query query = new Query().geoCode(new GeoLocation(10.491,-66.9021),1,"mi");
+         query.setCount(50);//busca 50 twitts
+         QueryResult result;
+         result = twitter.search(query);
+
+         java.util.List<Status> statusList = result.getTweets();// twitter.getHomeTimeline();
+            for (int i=0; i<statusList.size(); i++) {
+                    jTextArea1.append("-----------------------"+ i +"--------------------------\n");
+                    jTextArea1.append("Status :: "+String.valueOf(statusList.get(i))+"\n");
+                    jTextArea1.append("Localidad :: "+String.valueOf(statusList.get(i).getUser().getLocation())+"\n");
+                    jTextArea1.append("Usuario :: "+String.valueOf(statusList.get(i).getUser().getName())+"\n");
+                    jTextArea1.append("Tweet :: "+String.valueOf(statusList.get(i).getText())+"\n\n");  
+                
+            
+         }
+    }
+    //---------------------------------
+    //---------------------------------
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -76,10 +100,11 @@ public class TimeLine extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         BtnActualizar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        CheckBoxLocalidad = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("jLabel1");
         jLabel1.setMaximumSize(new java.awt.Dimension(48, 48));
         jLabel1.setMinimumSize(new java.awt.Dimension(48, 48));
         jLabel1.setPreferredSize(new java.awt.Dimension(48, 48));
@@ -95,6 +120,11 @@ public class TimeLine extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel2.setText("jLabel2");
+
+        CheckBoxLocalidad.setText("Caracas");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -108,18 +138,30 @@ public class TimeLine extends javax.swing.JFrame {
                         .addComponent(BtnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 35, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())))
+                        .addComponent(jScrollPane2)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(CheckBoxLocalidad)
+                        .addGap(47, 47, 47))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(CheckBoxLocalidad)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TxtActualizarTweet, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -134,7 +176,15 @@ public class TimeLine extends javax.swing.JFrame {
 
     private void BtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizarActionPerformed
         try {
+            if (CheckBoxLocalidad.isSelected()) {
+                jTextArea1.setText("");
+            //actualizar();
+            FiltroCaracas();
+            } else {
+                 jTextArea1.setText("");
             actualizar();
+            }
+           
         } catch (TwitterException ex) {
             Logger.getLogger(TimeLine.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -177,8 +227,10 @@ public class TimeLine extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnActualizar;
+    private javax.swing.JCheckBox CheckBoxLocalidad;
     private javax.swing.JTextField TxtActualizarTweet;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
