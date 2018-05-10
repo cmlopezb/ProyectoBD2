@@ -7,19 +7,24 @@ package twitterapp;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.List;
+import twitter4j.Status;
 
 /**
  *
  * @author Carlos
  */
 public class Grafico extends javax.swing.JFrame {
+    
+    public static java.util.List<Status> statusList2;
 
     /**
      * Creates new form Grafico
      */
-    public Grafico() {
+    public Grafico(java.util.List<Status> statusList ) {
         initComponents();
         setVisible(true);
+        statusList2=statusList;
         //graficar();
         
     }
@@ -115,6 +120,8 @@ public class Grafico extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        List<Status> statusList3 = statusList2;
+        
         Graphics g = jPanel1.getGraphics();
         float Caracas = 10;
         float Zulia = 20;
