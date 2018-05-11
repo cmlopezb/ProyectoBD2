@@ -34,93 +34,122 @@ public class TimeLine extends javax.swing.JFrame {
     public static int contE = 0;
     //public static String stnumI="";
     //public static String stnumE="";
-    
+
     public TimeLine(Twitter twitter) throws TwitterException, MalformedURLException {
         initComponents();
-        
-        this.twitter=twitter;
+
+        this.twitter = twitter;
         setTitle("TwitterApp");
         setVisible(true);
         //actualizar();
         //avatar de usuario--------------------
-            User user = twitter.showUser(twitter.getId());
-            jLabel2.setText(String.valueOf(user.getName()));
-            URL url = new URL (user.getProfileImageURL());
-            ImageIcon img = new ImageIcon(url);
-            jLabel1.setIcon(img);
-            //---------------------------
+        User user = twitter.showUser(twitter.getId());
+        jLabel2.setText(String.valueOf(user.getName()));
+        URL url = new URL(user.getProfileImageURL());
+        ImageIcon img = new ImageIcon(url);
+        jLabel1.setIcon(img);
+        //---------------------------
     }
 
     TimeLine() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    public void actualizarESP() throws TwitterException{
+
+    public void actualizarESP() throws TwitterException {
         //jTextArea1.setCaretPosition(0);
-         contE=0;
-         Query query = new Query(TxtActualizarTweet.getText());
-         query.setCount(50);//busca 50 twitts
-         QueryResult result;
-         result = twitter.search(query);
-                 
-         java.util.List<Status> statusList = result.getTweets();// twitter.getHomeTimeline();
-            for (int i=0; i<statusList.size(); i++) {               
-                
-                if(String.valueOf(statusList.get(i).getLang()).equals("es")){
-                    jTextArea1.append("-----------------------"+ i +"--------------------------\n");
-                    jTextArea1.append("Lenguaje :: "+String.valueOf(statusList.get(i).getLang())+"\n");
-                    jTextArea1.append("Localidad :: "+String.valueOf(statusList.get(i).getUser().getLocation())+"\n");
-                    jTextArea1.append("Usuario :: "+String.valueOf(statusList.get(i).getUser().getName())+"\n");
-                    jTextArea1.append("Tweet :: "+String.valueOf(statusList.get(i).getText())+"\n\n");
-                    contE++;
+        contE = 0;
+        Query query = new Query(TxtActualizarTweet.getText());
+        query.setCount(50);//busca 50 twitts
+        QueryResult result;
+        result = twitter.search(query);
+
+        java.util.List<Status> statusList = result.getTweets();// twitter.getHomeTimeline();
+        for (int i = 0; i < statusList.size(); i++) {
+
+            if (String.valueOf(statusList.get(i).getLang()).equals("es")) {
+                jTextArea1.append("-----------------------" + i + "--------------------------\n");
+                jTextArea1.append("Lenguaje :: " + String.valueOf(statusList.get(i).getLang()) + "\n");
+                jTextArea1.append("Localidad :: " + String.valueOf(statusList.get(i).getUser().getLocation()) + "\n");
+                jTextArea1.append("Usuario :: " + String.valueOf(statusList.get(i).getUser().getName()) + "\n");
+                jTextArea1.append("Tweet :: " + String.valueOf(statusList.get(i).getText()) + "\n\n");
+                contE++;
+            }
+
+        }
+
+    }
+
+    public void actualizarING() throws TwitterException {
+        //jTextArea1.setCaretPosition(0);
+        contI = 0;
+        Query query = new Query(TxtActualizarTweet.getText());
+        query.setCount(50);//busca 50 twitts
+        QueryResult result;
+        result = twitter.search(query);
+
+        java.util.List<Status> statusList = result.getTweets();// twitter.getHomeTimeline();
+        for (int i = 0; i < statusList.size(); i++) {
+
+            if (String.valueOf(statusList.get(i).getLang()).equals("en")) {
+                jTextArea1.append("-----------------------" + i + "--------------------------\n");
+                jTextArea1.append("Lenguaje :: " + String.valueOf(statusList.get(i).getLang()) + "\n");
+                jTextArea1.append("Localidad :: " + String.valueOf(statusList.get(i).getUser().getLocation()) + "\n");
+                jTextArea1.append("Usuario :: " + String.valueOf(statusList.get(i).getUser().getName()) + "\n");
+                jTextArea1.append("Tweet :: " + String.valueOf(statusList.get(i).getText()) + "\n\n");
+                contI++;
+            }
+
+        }
+
+    }
+
+    public void actualizarIdioma() throws TwitterException {
+        contI = 0;
+        Query query = new Query(TxtActualizarTweet.getText());
+        query.setCount(50);//busca 50 twitts
+        QueryResult result;
+        result = twitter.search(query);
+
+        java.util.List<Status> statusList = result.getTweets();// twitter.getHomeTimeline();
+        for (int i = 0; i < statusList.size(); i++) {
+
+            if ((String.valueOf(statusList.get(i).getLang()).equals("en"))||(String.valueOf(statusList.get(i).getLang()).equals("es"))) {
+                jTextArea1.append("-----------------------" + i + "--------------------------\n");
+                jTextArea1.append("Lenguaje :: " + String.valueOf(statusList.get(i).getLang()) + "\n");
+                jTextArea1.append("Localidad :: " + String.valueOf(statusList.get(i).getUser().getLocation()) + "\n");
+                jTextArea1.append("Usuario :: " + String.valueOf(statusList.get(i).getUser().getName()) + "\n");
+                jTextArea1.append("Tweet :: " + String.valueOf(statusList.get(i).getText()) + "\n\n");
+                if(String.valueOf(statusList.get(i).getLang()).equals("en")){
+                  contI++;
+                }
+                   if(String.valueOf(statusList.get(i).getLang()).equals("es")){
+                  contE++;
                 }
               
-            } 
-           
-    }
-    
-        public void actualizarING() throws TwitterException{
-        //jTextArea1.setCaretPosition(0);
-         contI=0;
-         Query query = new Query(TxtActualizarTweet.getText());
-         query.setCount(50);//busca 50 twitts
-         QueryResult result;
-         result = twitter.search(query);
-  
-         java.util.List<Status> statusList = result.getTweets();// twitter.getHomeTimeline();
-            for (int i=0; i<statusList.size(); i++) {               
-                
-                if(String.valueOf(statusList.get(i).getLang()).equals("en")){
-                    jTextArea1.append("-----------------------"+ i +"--------------------------\n");
-                    jTextArea1.append("Lenguaje :: "+String.valueOf(statusList.get(i).getLang())+"\n");
-                    jTextArea1.append("Localidad :: "+String.valueOf(statusList.get(i).getUser().getLocation())+"\n");
-                    jTextArea1.append("Usuario :: "+String.valueOf(statusList.get(i).getUser().getName())+"\n");
-                    jTextArea1.append("Tweet :: "+String.valueOf(statusList.get(i).getText())+"\n\n");
-                    contI++;
-                }
-                
-            } 
-            
-    }
-        
-         public void actualizar() throws TwitterException{
-        //jTextArea1.setCaretPosition(0);
-        
-         Query query = new Query(TxtActualizarTweet.getText());
-         query.setCount(50);//busca 50 twitts
-         QueryResult result;
-         result = twitter.search(query);
+            }
 
+        }
 
-         java.util.List<Status> statusList = result.getTweets();// twitter.getHomeTimeline();
-            for (int i=0; i<statusList.size(); i++) { 
-           
-                    jTextArea1.append("-----------------------"+ i +"--------------------------\n");
-                    jTextArea1.append("Lenguaje :: "+String.valueOf(statusList.get(i).getLang())+"\n");
-                    jTextArea1.append("Localidad :: "+String.valueOf(statusList.get(i).getUser().getLocation())+"\n");
-                    jTextArea1.append("Usuario :: "+String.valueOf(statusList.get(i).getUser().getName())+"\n");
-                    jTextArea1.append("Tweet :: "+String.valueOf(statusList.get(i).getText())+"\n\n");
-               
-            }  
+    }
+
+    public void actualizar() throws TwitterException {
+        //jTextArea1.setCaretPosition(0);
+
+        Query query = new Query(TxtActualizarTweet.getText());
+        query.setCount(50);//busca 50 twitts
+        QueryResult result;
+        result = twitter.search(query);
+
+        java.util.List<Status> statusList = result.getTweets();// twitter.getHomeTimeline();
+        for (int i = 0; i < statusList.size(); i++) {
+
+            jTextArea1.append("-----------------------" + i + "--------------------------\n");
+            jTextArea1.append("Lenguaje :: " + String.valueOf(statusList.get(i).getLang()) + "\n");
+            jTextArea1.append("Localidad :: " + String.valueOf(statusList.get(i).getUser().getLocation()) + "\n");
+            jTextArea1.append("Usuario :: " + String.valueOf(statusList.get(i).getUser().getName()) + "\n");
+            jTextArea1.append("Tweet :: " + String.valueOf(statusList.get(i).getText()) + "\n\n");
+
+        }
     }
 
     //---------------------------------
@@ -258,24 +287,24 @@ public class TimeLine extends javax.swing.JFrame {
 
     private void BtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizarActionPerformed
         try {
-            if (jCheckBoxESP.isSelected()) {
+            if (jCheckBoxING.isSelected() && jCheckBoxESP.isSelected()) {
+                jTextArea1.setText("");
+                actualizarIdioma();
+    
+            } else if (jCheckBoxING.isSelected()) {
+                jTextArea1.setText("");
+                actualizarING();
+             
+            } else if (jCheckBoxESP.isSelected()) {
                 jTextArea1.setText("");
                 actualizarESP();
-                //System.out.println(contE);
-                // stnumE= String.valueOf(contE); 
-                //System.out.println(stnumE);
-           
-            }else if(jCheckBoxING.isSelected()){
-             jTextArea1.setText("");
-                actualizarING();
-                //System.out.println(contI);
-                
-            
-            }else {
-                 jTextArea1.setText("");
-            actualizar();
+             
+
+            } else {
+                jTextArea1.setText("");
+                actualizar();
             }
-           
+
         } catch (TwitterException ex) {
             Logger.getLogger(TimeLine.class.getName()).log(Level.SEVERE, null, ex);
         }
