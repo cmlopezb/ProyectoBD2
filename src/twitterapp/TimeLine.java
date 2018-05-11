@@ -30,9 +30,14 @@ public class TimeLine extends javax.swing.JFrame {
      * Creates new form TimeLine
      */
     Twitter twitter;
-  
+    public static int contI = 0;
+    public static int contE = 0;
+    //public static String stnumI="";
+    //public static String stnumE="";
+    
     public TimeLine(Twitter twitter) throws TwitterException, MalformedURLException {
         initComponents();
+        
         this.twitter=twitter;
         setTitle("TwitterApp");
         setVisible(true);
@@ -51,7 +56,7 @@ public class TimeLine extends javax.swing.JFrame {
     }
     public void actualizarESP() throws TwitterException{
         //jTextArea1.setCaretPosition(0);
-        
+         contE=0;
          Query query = new Query(TxtActualizarTweet.getText());
          query.setCount(50);//busca 50 twitts
          QueryResult result;
@@ -66,13 +71,16 @@ public class TimeLine extends javax.swing.JFrame {
                     jTextArea1.append("Localidad :: "+String.valueOf(statusList.get(i).getUser().getLocation())+"\n");
                     jTextArea1.append("Usuario :: "+String.valueOf(statusList.get(i).getUser().getName())+"\n");
                     jTextArea1.append("Tweet :: "+String.valueOf(statusList.get(i).getText())+"\n\n");
+                    contE++;
                 }
-            }  
+              
+            } 
+           
     }
     
         public void actualizarING() throws TwitterException{
         //jTextArea1.setCaretPosition(0);
-        
+         contI=0;
          Query query = new Query(TxtActualizarTweet.getText());
          query.setCount(50);//busca 50 twitts
          QueryResult result;
@@ -87,8 +95,11 @@ public class TimeLine extends javax.swing.JFrame {
                     jTextArea1.append("Localidad :: "+String.valueOf(statusList.get(i).getUser().getLocation())+"\n");
                     jTextArea1.append("Usuario :: "+String.valueOf(statusList.get(i).getUser().getName())+"\n");
                     jTextArea1.append("Tweet :: "+String.valueOf(statusList.get(i).getText())+"\n\n");
+                    contI++;
                 }
-            }  
+                
+            } 
+            
     }
         
          public void actualizar() throws TwitterException{
@@ -250,10 +261,15 @@ public class TimeLine extends javax.swing.JFrame {
             if (jCheckBoxESP.isSelected()) {
                 jTextArea1.setText("");
                 actualizarESP();
+                //System.out.println(contE);
+                // stnumE= String.valueOf(contE); 
+                //System.out.println(stnumE);
            
             }else if(jCheckBoxING.isSelected()){
              jTextArea1.setText("");
                 actualizarING();
+                //System.out.println(contI);
+                
             
             }else {
                  jTextArea1.setText("");
@@ -266,7 +282,7 @@ public class TimeLine extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnActualizarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        GraficoTorta ventana = new GraficoTorta();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jCheckBoxESPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxESPActionPerformed
