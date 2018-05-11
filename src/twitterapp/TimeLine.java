@@ -151,6 +151,20 @@ public class TimeLine extends javax.swing.JFrame {
 
         }
     }
+    
+        public void timeLine() throws TwitterException {
+
+        java.util.List<Status> statusList =  twitter.getHomeTimeline();
+        for (int i = 0; i < statusList.size(); i++) {
+
+            jTextArea1.append("-----------------------" + i + "--------------------------\n");
+            jTextArea1.append("Lenguaje :: " + String.valueOf(statusList.get(i).getLang()) + "\n");
+            jTextArea1.append("Localidad :: " + String.valueOf(statusList.get(i).getUser().getLocation()) + "\n");
+            jTextArea1.append("Usuario :: " + String.valueOf(statusList.get(i).getUser().getName()) + "\n");
+            jTextArea1.append("Tweet :: " + String.valueOf(statusList.get(i).getText()) + "\n\n");
+
+        }
+    }
 
     //---------------------------------
     //---------------------------------
@@ -287,7 +301,12 @@ public class TimeLine extends javax.swing.JFrame {
 
     private void BtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizarActionPerformed
         try {
-            if (jCheckBoxING.isSelected() && jCheckBoxESP.isSelected()) {
+           
+            if (TxtActualizarTweet.getText().equals("")){
+                
+                timeLine();
+                System.out.println("vacioooo");
+            } else if (jCheckBoxING.isSelected() && jCheckBoxESP.isSelected()) {
                 jTextArea1.setText("");
                 actualizarIdioma();
     
